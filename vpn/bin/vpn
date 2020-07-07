@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+
+const program = require('commander');
+const vpn = require('../dist/index')
+
+program
+  .usage('[options]')
+  .option('-f, --fast', '使用默认账号快速启动vpn')
+  .option('-c, --connect', '使用交互方式启动vpn')
+  .parse(process.argv)
+
+if (program.fast) {
+  vpn.fastConnect({
+    password: 'abeir',
+    remote: 'a08.any00.com:1443',
+    vpnUser: 'abeir',
+    vpnPassword: 'abeir_33'
+  })
+}
+if (program.connect) {
+  vpn.connect()
+}
