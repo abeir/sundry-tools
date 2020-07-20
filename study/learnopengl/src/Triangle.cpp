@@ -19,6 +19,7 @@ namespace Draw {
                                        "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
                                        "}\0";
 
+
     void Triangle::preRender() {
 // vertex shader
         int vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -30,7 +31,10 @@ namespace Draw {
         glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
         if (!success) {
             glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
+            //编译失败，删除顶点着色器
+            glDeleteShader(vertexShader);
             setErrorMessage("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n") << infoLog;
+            return;
         }
         // fragment shader
         int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -40,7 +44,11 @@ namespace Draw {
         glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
         if (!success) {
             glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
+            //编译失败，删除顶点着色器和片段着色器
+            glDeleteShader(vertexShader);
+            glDeleteShader(fragmentShader);
             setErrorMessage("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n") << infoLog;
+            return;
         }
         // link shaders
         shaderProgram = glCreateProgram();
@@ -51,7 +59,12 @@ namespace Draw {
         glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
         if (!success) {
             glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
+            //链接着色器失败，删除顶点着色器、片段着色器和程序
+            glDeleteShader(vertexShader);
+            glDeleteShader(fragmentShader);
+            glDeleteProgram(shaderProgram);
             setErrorMessage("ERROR::SHADER::PROGRAM::LINKING_FAILED\n") << infoLog;
+            return;
         }
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);

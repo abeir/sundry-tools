@@ -98,8 +98,7 @@ namespace Draw {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, d->minor);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        // glfw window creation
-        // --------------------
+        //创建窗口
         GLFWwindow* window = glfwCreateWindow(d->width, d->height, d->title.c_str(), nullptr, nullptr);
         if (window == nullptr) {
             d->err = "Failed to create GLFW window";
@@ -107,6 +106,7 @@ namespace Draw {
             return;
         }
         glfwMakeContextCurrent(window);
+        //窗口大小改变时，调整视区大小
         glfwSetFramebufferSizeCallback(window, d->framebufferSizeCallbackFunc);
 
         // glad: load all OpenGL function pointers
@@ -115,16 +115,16 @@ namespace Draw {
             d->err = "Failed to initialize GLAD";
             return;
         }
-
+        // 预渲染
         preRender();
+        if(HasError()){
+            return;
+        }
 
-        // render loop
-        // -----------
+        // 主渲染循环
         while (!glfwWindowShouldClose(window)) {
-            // input
-            // -----
+            //输入
             d->processInputFunc(window);
-
             // render
             // ------
             glClearColor(d->bgR, d->bgG, d->bgB, d->bgA);
@@ -139,6 +139,7 @@ namespace Draw {
         }
 
         clear();
+
         glfwTerminate();
         d->err.clear();
     }
@@ -179,7 +180,9 @@ namespace Draw {
     }
 
     const char* Draw::AbstractDraw::ErrorMessage() {
-        return d->err.toData();
+        const char* msg = d->err.toData();
+        d->err.clear();
+        return msg;
     }
 
     AbstractDraw &AbstractDraw::setVersion(int major, int minor) {
