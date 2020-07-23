@@ -1,8 +1,4 @@
-#include <iostream>
-#include "util/utils.h"
-#include "Triangle.h"
-#include "Triangle2.h"
-#include "TextureContainer.h"
+#include "main.h"
 
 
 int main() {
@@ -12,15 +8,11 @@ int main() {
     std::cout << "PROJECT_TEXTURE_DIR: " << textureDir << std::endl;
 
 //    // 绘制三角形
-//    Draw::Triangle2 t;
-//    t.Draw();
-//    if(t.HasError()){
-//        std::cout << t.ErrorMessage() << std::endl;
-//    }
-
-    // 绘制纹理
-    Texture::TextureContainer t;
-    t.Draw();
+//    triangle2();
+//    // 绘制纹理
+//    textureContainer();
+    // 变换
+    transformations();
 
     return 0;
 }
