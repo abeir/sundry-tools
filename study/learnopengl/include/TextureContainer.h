@@ -27,6 +27,4 @@ namespace Texture {
     };
 }
 
-
-
 #endif //LEARNOPENGL_TEXTURECONTAINER_H

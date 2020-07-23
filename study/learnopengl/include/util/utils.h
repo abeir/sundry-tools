@@ -53,5 +53,4 @@ namespace Util {
 
 }
 
-
 #endif //LEARNOPENGL_UTILS_H

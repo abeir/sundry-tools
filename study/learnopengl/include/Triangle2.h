@@ -24,6 +24,4 @@ namespace Draw {
     };
 }
 
-
-
 #endif //LEARNOPENGL_TRIANGLE2_H
