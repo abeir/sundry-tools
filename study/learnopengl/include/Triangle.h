@@ -9,6 +9,9 @@
 
 namespace Draw {
 
+    /**
+     * 单色三角形
+     */
     class Triangle : public AbstractDraw {
     public:
         void preRender() override;

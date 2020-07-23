@@ -21,7 +21,7 @@ namespace Draw {
 
 
     void Triangle::preRender() {
-// vertex shader
+        // vertex shader
         int vertexShader = glCreateShader(GL_VERTEX_SHADER);
         glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
         glCompileShader(vertexShader);
