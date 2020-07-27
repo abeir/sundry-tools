@@ -199,6 +199,14 @@ namespace Draw {
         return d->err = msg;
     }
 
+    int AbstractDraw::width() {
+        return d->width;
+    }
+
+    int AbstractDraw::height() {
+        return d->height;
+    }
+
     void defaultFramebufferSizeCallback(GLFWwindow *window, int width, int height) {
         glViewport(0, 0, width, height);
     }

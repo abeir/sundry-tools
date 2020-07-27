@@ -54,6 +54,9 @@ namespace Draw {
         AbstractDraw& setProcessInput(ProcessInputFunc func);
         AbstractDraw& setFramebufferSizeCallback(FramebufferSizeCallbackFunc func);
 
+        int width();
+        int height();
+
         ErrorInfo& setErrorMessage(const char* msg);
 
         bool HasError();
