@@ -1,9 +1,9 @@
 //
-// Created by abeir on 2020/7/23.
+// Created by abeir on 2020/7/27.
 //
 
-#ifndef LEARNOPENGL_TRANSFORMATIONS_H
-#define LEARNOPENGL_TRANSFORMATIONS_H
+#ifndef LEARNOPENGL_COORDINATESYSTEMS_H
+#define LEARNOPENGL_COORDINATESYSTEMS_H
 
 #include "AbstractDraw.h"
 
@@ -11,11 +11,11 @@ namespace Util {
     class Shader;
 }
 
-namespace Trans {
+namespace CoordinateSystems {
     /**
-     * 变换
+     * 坐标系-深度
      */
-    class Transformations : public Draw::AbstractDraw{
+    class CoordinateSystems : public Draw::AbstractDraw{
     public:
         void preRender() override;
         void render() override;
@@ -27,6 +27,4 @@ namespace Trans {
     };
 }
 
-
-
-#endif //LEARNOPENGL_TRANSFORMATIONS_H
+#endif //LEARNOPENGL_COORDINATESYSTEMS_H

@@ -19,7 +19,7 @@ namespace Texture {
     public:
         void preRender() override;
         void render() override;
-        void clear() override;
+        void release() override;
     private:
         unsigned int VBO, VAO, EBO;
         unsigned int texture1, texture2;

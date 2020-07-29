@@ -16,7 +16,7 @@ namespace Draw {
     public:
         void preRender() override;
         void render() override;
-        void clear() override;
+        void release() override;
     private:
         int shaderProgram;
         unsigned int VBO;

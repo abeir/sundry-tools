@@ -11,8 +11,12 @@ int main() {
 //    triangle2();
 //    // 绘制纹理
 //    textureContainer();
-    // 变换
-    transformations();
+//    // 变换
+//    transformations();
+//    // 坐标系
+//    coordinateSystems();
+    // 坐标系 深度
+    coordinateSystemsDepth();
 
     return 0;
 }

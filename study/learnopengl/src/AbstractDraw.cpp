@@ -90,6 +90,11 @@ namespace Draw {
         delete d;
     }
 
+    void AbstractDraw::clearRender() {
+        glClearColor(d->bgR, d->bgG, d->bgB, d->bgA);
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+
     void Draw::AbstractDraw::Draw() {
         // glfw: initialize and configure
         // ------------------------------
@@ -125,11 +130,9 @@ namespace Draw {
         while (!glfwWindowShouldClose(window)) {
             //输入
             d->processInputFunc(window);
-            // render
-            // ------
-            glClearColor(d->bgR, d->bgG, d->bgB, d->bgA);
-            glClear(GL_COLOR_BUFFER_BIT);
-
+            // 清除渲染
+            clearRender();
+            // 渲染
             render();
 
             // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
@@ -138,7 +141,7 @@ namespace Draw {
             glfwPollEvents();
         }
 
-        clear();
+        release();
 
         glfwTerminate();
         d->err.clear();

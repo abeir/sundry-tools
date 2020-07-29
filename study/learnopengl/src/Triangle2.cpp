@@ -104,7 +104,7 @@ void Draw::Triangle2::render() {
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
-void Draw::Triangle2::clear() {
+void Draw::Triangle2::release() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteProgram(shaderProgram);

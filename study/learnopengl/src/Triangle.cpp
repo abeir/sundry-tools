@@ -103,7 +103,7 @@ namespace Draw {
         // glBindVertexArray(0); // no need to unbind it every time
     }
 
-    void Triangle::clear() {
+    void Triangle::release() {
         glDeleteVertexArrays(1, &VAO);
         glDeleteBuffers(1, &VBO);
         glDeleteProgram(shaderProgram);

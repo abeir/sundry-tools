@@ -41,7 +41,9 @@ namespace Draw {
 
         virtual void preRender() =0;
         virtual void render() =0;
-        virtual void clear() =0;
+        virtual void release() =0;
+
+        virtual void clearRender();
 
         void Draw();
 
