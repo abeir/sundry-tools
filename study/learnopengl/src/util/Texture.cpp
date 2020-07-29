@@ -9,12 +9,8 @@
 
 namespace Util {
 
-
     Texture::Texture(const char *shortFilename)
             : m_filename(Util::Res::TextureFile(shortFilename)) {
-        m_height = 0;
-        m_width = 0;
-        m_channels = 0;
     }
 
     Texture::~Texture() = default;

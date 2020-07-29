@@ -11,6 +11,7 @@ namespace Util {
      */
     class Texture{
     public:
+        Texture() = default;
         explicit Texture(const char* shortFilename);
         virtual ~Texture();
 
@@ -28,10 +29,10 @@ namespace Util {
     private:
         void setError(const char*);
 
-        const char* m_filename;
-        int m_height;
-        int m_width;
-        int m_channels;
+        const char* m_filename{};
+        int m_height{};
+        int m_width{};
+        int m_channels{};
         char* m_err = nullptr;
     };
 }

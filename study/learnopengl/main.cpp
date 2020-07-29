@@ -15,8 +15,10 @@ int main() {
 //    transformations();
 //    // 坐标系
 //    coordinateSystems();
-    // 坐标系 深度
-    coordinateSystemsDepth();
+//    // 坐标系 深度
+//    coordinateSystemsDepth();
+    // 摄像机 转圈
+    cameraCircle();
 
     return 0;
 }

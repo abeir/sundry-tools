@@ -21,6 +21,7 @@ namespace Util {
 
     const char* JoinPath(const std::string &prefix, const std::string &suffix);
 
+
     namespace Res {
         /**
          * 项目源码中的res目录路径

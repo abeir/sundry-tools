@@ -1,23 +1,38 @@
 //
-// Created by abeir on 2020/7/27.
+// Created by abeir on 2020/7/29.
 //
 
-#include "CoordinateSystemsDepth.h"
+#include "CameraCircle.h"
 #include "util/utils.h"
 #include "util/Shader.h"
 #include "util/Texture.h"
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <array>
 
-namespace CoordinateSystems {
+namespace Camera {
 
-    void CoordinateSystemsDepth::preRender() {
+    // 立方体在世界空间中的位置
+    std::array<glm::vec3, 10> cubePositions = {
+            glm::vec3( 0.0f,  0.0f,  0.0f),
+            glm::vec3( 2.0f,  5.0f, -15.0f),
+            glm::vec3(-1.5f, -2.2f, -2.5f),
+            glm::vec3(-3.8f, -2.0f, -12.3f),
+            glm::vec3 (2.4f, -0.4f, -3.5f),
+            glm::vec3(-1.7f,  3.0f, -7.5f),
+            glm::vec3( 1.3f, -2.0f, -2.5f),
+            glm::vec3( 1.5f,  2.0f, -2.5f),
+            glm::vec3( 1.5f,  0.2f, -1.5f),
+            glm::vec3(-1.3f,  1.0f, -1.5f)
+    };
+
+    void CameraCircle::preRender() {
         // 启用深度测试
         glEnable(GL_DEPTH_TEST);
         // 编译着色器
-        const char* vShaderPath = Util::Res::ShaderFile("coordinate_systems.vs");
-        const char* fShaderPath = Util::Res::ShaderFile("coordinate_systems.fs");
+        const char* vShaderPath = Util::Res::ShaderFile("camera.vs");
+        const char* fShaderPath = Util::Res::ShaderFile("camera.fs");
         shader = new Util::Shader(vShaderPath, fShaderPath);
 
         // 顶点和纹理坐标
@@ -76,7 +91,7 @@ namespace CoordinateSystems {
         // 位置属性
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*) nullptr);
         glEnableVertexAttribArray(0);
-        // 纹理坐标属性
+        // 纹理属性
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
 
@@ -119,9 +134,13 @@ namespace CoordinateSystems {
         shader->Use();
         shader->SetInt("texture1", 0);
         shader->SetInt("texture2", 1);
+
+        // 创建透视投影矩阵
+        glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)width() / (float)height(), 0.1f, 100.0f);
+        shader->SetMat4("projection", projection);
     }
 
-    void CoordinateSystemsDepth::render() {
+    void CameraCircle::render() {
         // 绑定纹理
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
@@ -130,38 +149,37 @@ namespace CoordinateSystems {
         // 激活着色器
         shader->Use();
 
-        // 创建转换
-        glm::mat4 model         = glm::mat4(1.0f); // 确保初始的为单元矩阵
-        glm::mat4 view          = glm::mat4(1.0f);
-        glm::mat4 projection    = glm::mat4(1.0f);
-        // 沿x,y轴随时间旋转
-        model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
-        // 沿z轴位移
-        view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-        // 创建透视投影矩阵
-        projection = glm::perspective(glm::radians(45.0f), (float)width() / (float)height(), 0.1f, 100.0f);
-        // 获取uniform参数位置
-        unsigned int modelLoc = shader->GetUniformLocation("model");
-        unsigned int viewLoc  = shader->GetUniformLocation("view");
+        // 摄像机视图变换
+        glm::mat4 view = glm::mat4(1.0f);       // 创建一个单位矩阵
+        float radius = 10.0f;
+        double time = glfwGetTime();
+        float camX   = sin(time) * radius;
+        float camZ   = cos(time) * radius;
+        view = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        shader->SetMat4("view", view);
 
-        // 下面使用三种方式设置着色器参数
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
-        // 注意：目前我们在每一帧设置投影矩阵，但是由于投影矩阵很少更改，所以最好的做法是只在主循环之外设置一次。
-        shader->SetMat4("projection", projection);
-
-        // 渲染
+        // 渲染立方体
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        for(int i=0; i<cubePositions.size(); i++) {
+            // 计算每个对象的模型矩阵，并在绘制之前将其传递给着色器
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, cubePositions[i]);
+            float angle = 20.0f * (float)i;
+            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+            shader->SetMat4("model", model);
+
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
     }
 
-    void CoordinateSystemsDepth::release() {
+    void CameraCircle::release() {
         glDeleteVertexArrays(1, &VAO);
         glDeleteBuffers(1, &VBO);
         delete shader;
     }
 
-    void CoordinateSystemsDepth::clearRender() {
+    void CameraCircle::clearRender() {
         AbstractDraw::clearRender();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }

@@ -6,6 +6,8 @@
 #include "Transformations.h"
 #include "CoordinateSystems.h"
 #include "CoordinateSystemsDepth.h"
+#include "CameraCircle.h"
+#include "AbstractCamera.h"
 
 // 绘制三角形2
 void triangle2(){
@@ -42,6 +44,16 @@ void coordinateSystemsDepth(){
     CoordinateSystems::CoordinateSystemsDepth c;
     c.Draw();
     if(c.HasError()){
+        std::cout << "Error: " << c.ErrorMessage() << std::endl;
+    }
+}
+
+// 摄像机 转圈
+void cameraCircle(){
+    Camera::AbstractCamera c;
+//    Camera::CameraCircle c;
+    c.Draw();
+    if(c.HasError()) {
         std::cout << "Error: " << c.ErrorMessage() << std::endl;
     }
 }
